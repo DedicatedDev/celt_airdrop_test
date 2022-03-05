@@ -1,11 +1,9 @@
 import { ethers } from 'ethers'
-import {useEffect,useState} from 'react'
+import {useState} from 'react'
 import type { NextPage } from 'next'
-import styles from '../styles/Home.module.css'
-import axios from 'axios'
 import Web3Modal from 'web3modal'
 import CeltMinterABI from '../artifacts/contracts/CeltMinter.sol/CeltMinter.json'
-import { celtMinterAddress, nftmarketaddress,rinkebyApiKey,rinkebyId } from '../config'
+import { celtMinterAddress} from '../config'
 import { CeltMinter } from '../typechain/CeltMinter'
 
 const Home: NextPage = () => {
