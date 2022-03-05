@@ -4,7 +4,7 @@ import axios from 'axios'
 import Web3Modal from "web3modal"
 
 import {
-  nftmarketaddress, nftaddress
+  nftmarketaddress, celtMinterAddress
 } from '../config'
 
 import NFTContract from '../artifacts/contracts/NFT.sol/NFT.json'
@@ -29,7 +29,7 @@ export default function CreatorDashboard() {
     const signer = provider.getSigner()
       
     const marketContract = new ethers.Contract(nftmarketaddress, MarketContract.abi, signer)
-    const tokenContract = new ethers.Contract(nftaddress, NFTContract.abi, provider)
+    const tokenContract = new ethers.Contract(celtMinterAddress, NFTContract.abi, provider)
     const data = await marketContract.fetchItemsCreated()
     
     const items = await Promise.all(data.map(async i => {
@@ -52,15 +52,15 @@ export default function CreatorDashboard() {
     setNfts(items)
     setLoadingState('loaded') 
   }
-  if (loadingState === 'loaded' && !nfts.length) return (<h1 className="py-10 px-20 text-3xl">No assets created</h1>)
+  if (loadingState === 'loaded' && !nfts.length) return (<h1 className="px-20 py-10 text-3xl">No assets created</h1>)
   return (
     <div>
       <div className="p-4">
-        <h2 className="text-2xl py-2">Items Created</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+        <h2 className="py-2 text-2xl">Items Created</h2>
+          <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="border shadow rounded-xl overflow-hidden">
+              <div key={i} className="overflow-hidden border shadow rounded-xl">
                 <img src={nft.image} className="rounded" />
                 <div className="p-4 bg-black">
                   <p className="text-2xl font-bold text-white">Price - {nft.price} Eth</p>
@@ -74,11 +74,11 @@ export default function CreatorDashboard() {
         {
           Boolean(sold.length) && (
             <div>
-              <h2 className="text-2xl py-2">Items sold</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+              <h2 className="py-2 text-2xl">Items sold</h2>
+              <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
                 {
                   sold.map((nft, i) => (
-                    <div key={i} className="border shadow rounded-xl overflow-hidden">
+                    <div key={i} className="overflow-hidden border shadow rounded-xl">
                       <img src={nft.image} className="rounded" />
                       <div className="p-4 bg-black">
                         <p className="text-2xl font-bold text-white">Price - {nft.price} Eth</p>

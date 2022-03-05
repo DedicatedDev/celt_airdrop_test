@@ -3,7 +3,7 @@ import {useEffect,useState} from 'react'
 import axios from 'axios'
 import Web3Modal from 'web3modal'
 
-import { nftaddress,nftmarketaddress } from '../config'
+import { celtMinterAddress,nftmarketaddress } from '../config'
 
 import NFTContract from '../artifacts/contracts/NFT.sol/NFT.json'
 import MarketContract from '../artifacts/contracts/NFTMarket.sol/NFTMarket.json'
@@ -27,7 +27,7 @@ export default function MyAssets() {
         const provider = new ethers.providers.Web3Provider(connection)
         const signer = provider.getSigner()
         
-        const tokenContract = new ethers.Contract(nftaddress, NFTContract.abi, signer) as NFT
+        const tokenContract = new ethers.Contract(celtMinterAddress, NFTContract.abi, signer) as NFT
         const marketContract = new ethers.Contract(nftmarketaddress, MarketContract.abi, signer) as NFTMarket
         const data = await marketContract.fetchMyNFTs()
 
@@ -52,16 +52,16 @@ export default function MyAssets() {
   }
 
   if (loadingState ==='loaded' && !nfts.length) return (
-      <h1 className="py-10 px-20 text-3xl">No assets owned</h1>
+      <h1 className="px-20 py-10 text-3xl">No assets owned</h1>
   )
 
    return (
     <div className="flex justify-center">
       <div className="p-4">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-4">
+        <div className="grid grid-cols-1 gap-4 pt-4 sm:grid-cols-2 lg:grid-cols-4">
           {
             nfts.map((nft, i) => (
-              <div key={i} className="border shadow rounded-xl overflow-hidden">
+              <div key={i} className="overflow-hidden border shadow rounded-xl">
                 <img src={nft.image} className="rounded" />
                 <div className="p-4 bg-black">
                   <p className="text-2xl font-bold text-white">Price - {nft.price} Eth</p>
