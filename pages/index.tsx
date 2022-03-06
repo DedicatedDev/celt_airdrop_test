@@ -20,7 +20,9 @@ const Home: NextPage = () => {
     if(count == 0) {
       return;
     }
-    const transaction = await contract.claim(count)
+    const transaction = await contract.claim(count,{
+      value: count * 1e15
+    })
     await transaction.wait();
   }
 
