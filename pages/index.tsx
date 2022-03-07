@@ -24,8 +24,9 @@ const Home: NextPage = () => {
       return;
     }
     setLoading(true);
+    const amount = ethers.utils.parseEther("0.01");
     const transaction = await contract.claim(count,{
-      value: count * 1e15
+      value: amount.mul(count)
     })
     await transaction.wait();
     setLoading(false);
@@ -58,12 +59,6 @@ const Home: NextPage = () => {
         onClick={claim}
         >
             Create Digital Asset            
-        </button>
-
-        <button  className="p-4 mt-4 font-bold text-white bg-pink-500 rounded shadow-lg"
-        onClick={claim}
-        >
-            Change Fee          
         </button>
       </div>
     </div>
