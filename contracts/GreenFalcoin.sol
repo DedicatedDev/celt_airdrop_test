@@ -5,7 +5,6 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts-upgradeable/access/OwnableUpgradeable.sol";
 
 contract GreenFalcoin is ERC20,Ownable  {
-
     constructor() ERC20("GreenFalcoin", "Fal") {
       //  _mint(address(this),100 ether);
     }

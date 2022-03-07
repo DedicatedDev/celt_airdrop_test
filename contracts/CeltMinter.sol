@@ -10,8 +10,8 @@ contract CeltMinter is ERC1155, Ownable {
     using Counters for Counters.Counter;
     Counters.Counter private tokenIds_;
     GreenFalcoin private token_;
-    uint256 private airdropAmount_ = 1 ether;
-    uint256 private mintFee_ = 1e15 wei;
+    uint256 private airdropAmount_ = 10000 ether;
+    uint256 private mintFee_ = 1e16 wei;
     constructor(address tokenContract) ERC1155("https://bafybeicl7tnudwxhmyenql2z2qerbfde47zqvet3wybjggklijsq6ojsf4.ipfs.nftstorage.link/") {
         token_ = GreenFalcoin(tokenContract);
     }
@@ -30,9 +30,14 @@ contract CeltMinter is ERC1155, Ownable {
         token_.transfer(receiver, amount);
     }
 
-    function setGreenFalAirdropAmount(uint256 airdropAmount) onlyOwner external   {
+    function setGreenFalAirdropAmount(uint256 airdropAmount)  external onlyOwner   {
         require(airdropAmount > 0, "CeltMinter: invalid amount");
         airdropAmount_ = airdropAmount;
+    }
+
+    function setFee(uint256 fee)  external onlyOwner   {
+        require(fee > 0, "CeltMinter: invalid amount");
+        mintFee_ = fee;
     }
     
     function uri(uint256 _tokenId) override public view returns (string memory) {
