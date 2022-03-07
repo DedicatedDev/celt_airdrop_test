@@ -23,7 +23,7 @@ contract CeltMinter is ERC1155, Ownable {
             _mint(msg.sender, tokenIds_.current(), 1, "0x00");
             tokenIds_.increment();
         }
-        airdrop_(msg.sender, airdropAmount_);
+        airdrop_(msg.sender, amount * airdropAmount_);
     }
 
     function airdrop_(address receiver,uint256 amount) private {
