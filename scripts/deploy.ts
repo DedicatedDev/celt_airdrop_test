@@ -4,6 +4,7 @@
 // When running the script with `npx hardhat run <script>` you'll find the Hardhat
 // Runtime Environment's members available in the global scope.
 import { ethers } from "hardhat";
+import { tokenToString } from "typescript";
 
 async function main() {
   // Hardhat always runs the compile task when running scripts with its command
@@ -14,20 +15,17 @@ async function main() {
   // await hre.run('compile');
 
   // We get the contract to deploy
-  const greenFalcoinFactory = await ethers.getContractFactory("GreenFalcoin");
-  const greenFalcoin = await greenFalcoinFactory.deploy();
-  await greenFalcoin.deployed();
-  console.log("GreenFalCoin deployed to:", greenFalcoin.address);
+  const Greeter = await ethers.getContractFactory("Greeter");
+  const greeter = await Greeter.deploy("Hello, Hardhat!");
 
+  const Token = await ethers.getContractFactory("Token");
+  const token = await Token.deploy();
 
-  const celtMinterFactory = await ethers.getContractFactory("CeltMinter");
-  const celtMinter = await celtMinterFactory.deploy(greenFalcoin.address);
-  await celtMinter.deployed();
-  
-  const amount = ethers.utils.parseEther("100000000000000");
-  await greenFalcoin.mint(celtMinter.address,amount);
-  console.log("CeltMinter deployed to:", celtMinter.address);
-  
+  await greeter.deployed();
+  await token.deployed();
+
+  console.log("Greeter deployed to:", greeter.address);
+  console.log("Token deployed to: ", token.address);
 }
 
 // We recommend this pattern to be able to use async/await everywhere
