@@ -1,5 +1,5 @@
 import {styled, width} from "@mui/system"
-import { Button, Icon, IconButton, TextField } from "@mui/material"
+import { Button, Icon, IconButton, TextField, Typography } from "@mui/material"
 import ImportExportIcon from '@mui/icons-material/ImportExport';
 import { useEffect, useState, useRef } from "react";
 import Web3Modal from 'web3modal'
@@ -8,10 +8,19 @@ import CeltMinterABI from '../artifacts/contracts/CeltMinter.sol/CeltMinter.json
 import { celtMinterAddress} from '../config'
 import {CeltMinter} from "../../typechain-types"
 import MintBgImg from "../assets/mintBgImg.png"
-import LoadingButton from '@mui/lab/LoadingButton';
-import CircularProgress from '@mui/material/CircularProgress';
+import LoadingButton from '@mui/lab/LoadingButton'
+import CircularProgress from '@mui/material/CircularProgress'
 import Box from '@mui/material/Box';
 import Favicon from "../assets/favicon.png"
+import OpenSeaIcon from "../assets/openseaIcon.svg"
+import { delay } from "../utils/Utils";
+
+enum TransactionStatus {
+    success,
+    fail,
+    inProgress,
+    finish
+}
 
 export const Minter = () => {
     const MainContainer = styled('div')(({theme})=>({
@@ -35,11 +44,10 @@ export const Minter = () => {
     
     const InputWrapper = styled(TextField)(({theme})=>({
         color:'white',
-        borderColor:'#000',
+        borderColor:'#fff',
         multilineColor:{
             color:'white'
         }
-        
     }))
 
     const ComponentContainer = styled('div')(({theme})=>({
@@ -49,6 +57,8 @@ export const Minter = () => {
         left:'50%',
         top:'45%',
         transform: 'translate(-50%, -50%)',
+        justifyContent:'center',
+        justifyItems:'center'
     }))
 
     const MintBtn = styled(Button)(({theme})=>({
@@ -63,8 +73,22 @@ export const Minter = () => {
         zIndex:1
     }))
 
+    const CheckNFTBtn = styled(Button)(({theme})=>({
+        width:'40px',
+        height:'40px',
+    }))
+
+    const MessageWrapper = styled('div')(({theme})=>({
+        display:'flex',
+        flexDirection:'row',
+        padding:'50px',
+        justifyContent:'center',
+    }))
+
     const [formInput, updateFormInput] = useState({count:''})
     const [loading, setLoading] = useState(false)
+    const [status, setStatus] = useState(TransactionStatus.finish);
+
     const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         updateFormInput((prev)=>({...prev,count:event.target.value}))
     };
@@ -79,13 +103,40 @@ export const Minter = () => {
         if(count == 0) {
             return;
         }
-        setLoading(true);
+        //setLoading(true);
+        setStatus(TransactionStatus.inProgress);
         const amount = ethers.utils.parseEther("0.01");
-        const transaction = await contract.claim(count,{
-            value: amount.mul(count)
-        })
-        await transaction.wait();
-        setLoading(false);
+        try {
+            const transaction = await contract.claim(count,{
+                value: amount.mul(count)
+            })
+            await transaction.wait();
+            setStatus(TransactionStatus.success);
+        } catch (error) {
+            setStatus(TransactionStatus.fail);
+        }
+        await delay(5000)
+        setStatus(TransactionStatus.finish);
+    }
+
+    const openOpenSea = () => {
+        var win = window.open('https://testnets.opensea.io/account', '_blank')
+        win.focus()
+    }
+
+    const bottomElement = () => {
+        switch (status) {
+            case TransactionStatus.finish:
+                return (<MintBtn size="large" endIcon={<ImportExportIcon />} onClick={claim}>
+                Buy Celts
+                    </MintBtn>)
+            case TransactionStatus.fail:
+                return (<MessageWrapper><Typography color="red" fontSize="28px">Failed</Typography></MessageWrapper>)
+            case TransactionStatus.success:
+                return (<MessageWrapper><Typography color="green" fontSize="28px">Success</Typography></MessageWrapper>)
+            default:
+                return (<Box sx={{ display: 'flex', justifyContent:'center', padding:'50px' }}><CircularProgress color="secondary" /></Box>)
+        }
     }
 
     return(
@@ -93,14 +144,12 @@ export const Minter = () => {
             <MainBgImgWrapper src={MintBgImg}>
             </MainBgImgWrapper>
             <ComponentContainer>
-                <InputWrapper id="filled-basic" value={formInput.count} onChange={handleChange} autoFocus label="Amount" color="secondary" sx={{input:{color: 'white'}}}></InputWrapper>
-                {
-                    !loading ? <MintBtn size="large" endIcon={<ImportExportIcon />} onClick={claim}>
-                        Buy Celts
-                    </MintBtn> : <Box sx={{ display: 'flex', justifyContent:'center', padding:'50px' }}><CircularProgress color="secondary" /></Box>
-                }
-                
+                <InputWrapper id="filled-basic" value={formInput.count} onChange={handleChange} autoFocus label="Amount" color="secondary" sx={{input:{color: 'white', notchedOutline:'white' }}}></InputWrapper>
+                {bottomElement()}
             </ComponentContainer>
+            <div style={{position:'absolute', top:'20px', right:'50px'}}>
+                <CheckNFTBtn size="small" endIcon={<img src={OpenSeaIcon} style={{width:44}} />} onClick={openOpenSea} />
+            </div>
             <Footer>
                 <img src={Favicon} style={{height:'80px'}}></img>
             </Footer> 
