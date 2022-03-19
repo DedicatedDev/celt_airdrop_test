@@ -12,18 +12,23 @@ contract CeltMinter is ERC1155, Ownable {
     GreenFalcoin private token_;
     uint256 private airdropAmount_ = 10000 ether;
     uint256 private mintFee_ = 1e16 wei;
-    constructor(address tokenContract) ERC1155("https://bafybeicl7tnudwxhmyenql2z2qerbfde47zqvet3wybjggklijsq6ojsf4.ipfs.nftstorage.link/") {
+
+    constructor(address tokenContract) ERC1155("https://bafybeiart4ifwiigqlkw6m7mmumetlquozzalj3tbtbhdofwsvaoim6znu.ipfs.nftstorage.link/") {
         token_ = GreenFalcoin(tokenContract);
     }
 
-    function claim(uint256 amount) external payable {
+    function claim(uint256 amount, bool levelup) external payable {
         require(msg.value == mintFee_ * amount, "CeltMinter: not enough fund");
         require(amount<1000,"CeltMinter: exccced amount");
         for (uint256 index = 0; index < amount; index++) {
             _mint(msg.sender, tokenIds_.current(), 1, "0x00");
             tokenIds_.increment();
         }
-        airdrop_(msg.sender, amount * airdropAmount_);
+        if(levelup){
+            airdrop_(msg.sender, amount * airdropAmount_ * 5);
+        }else{
+            airdrop_(msg.sender, amount * airdropAmount_);
+        }
     }
 
     function airdrop_(address receiver,uint256 amount) private {
@@ -42,10 +47,14 @@ contract CeltMinter is ERC1155, Ownable {
     
     function uri(uint256 _tokenId) override public view returns (string memory) {
         return string(abi.encodePacked(
-            "https://bafybeicl7tnudwxhmyenql2z2qerbfde47zqvet3wybjggklijsq6ojsf4.ipfs.nftstorage.link/",
-            Strings.toString(_tokenId),
+            "https://bafybeiart4ifwiigqlkw6m7mmumetlquozzalj3tbtbhdofwsvaoim6znu.ipfs.nftstorage.link/",
+            Strings.toString(_tokenId+1),
             ".json"
         ));
+    }
+
+    function burn(uint256 tokenId) external {
+        _burn(msg.sender,tokenId,1);
     }
 
     function withdraw(uint256 withdrawAmount) external onlyOwner {
@@ -55,5 +64,9 @@ contract CeltMinter is ERC1155, Ownable {
         } else{
             (bool sent, ) = payable(address(this)).call{value:withdrawAmount}("");
         }
+    }
+
+    function setUri(string memory domain) external onlyOwner {
+        _setURI(domain);
     }
 }

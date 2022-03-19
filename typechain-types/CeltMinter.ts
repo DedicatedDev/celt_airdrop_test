@@ -23,7 +23,8 @@ export interface CeltMinterInterface extends utils.Interface {
   functions: {
     "balanceOf(address,uint256)": FunctionFragment;
     "balanceOfBatch(address[],uint256[])": FunctionFragment;
-    "claim(uint256)": FunctionFragment;
+    "burn(uint256)": FunctionFragment;
+    "claim(uint256,bool)": FunctionFragment;
     "isApprovedForAll(address,address)": FunctionFragment;
     "owner()": FunctionFragment;
     "renounceOwnership()": FunctionFragment;
@@ -32,6 +33,7 @@ export interface CeltMinterInterface extends utils.Interface {
     "setApprovalForAll(address,bool)": FunctionFragment;
     "setFee(uint256)": FunctionFragment;
     "setGreenFalAirdropAmount(uint256)": FunctionFragment;
+    "setUri(string)": FunctionFragment;
     "supportsInterface(bytes4)": FunctionFragment;
     "transferOwnership(address)": FunctionFragment;
     "uri(uint256)": FunctionFragment;
@@ -46,7 +48,11 @@ export interface CeltMinterInterface extends utils.Interface {
     functionFragment: "balanceOfBatch",
     values: [string[], BigNumberish[]]
   ): string;
-  encodeFunctionData(functionFragment: "claim", values: [BigNumberish]): string;
+  encodeFunctionData(functionFragment: "burn", values: [BigNumberish]): string;
+  encodeFunctionData(
+    functionFragment: "claim",
+    values: [BigNumberish, boolean]
+  ): string;
   encodeFunctionData(
     functionFragment: "isApprovedForAll",
     values: [string, string]
@@ -76,6 +82,7 @@ export interface CeltMinterInterface extends utils.Interface {
     functionFragment: "setGreenFalAirdropAmount",
     values: [BigNumberish]
   ): string;
+  encodeFunctionData(functionFragment: "setUri", values: [string]): string;
   encodeFunctionData(
     functionFragment: "supportsInterface",
     values: [BytesLike]
@@ -95,6 +102,7 @@ export interface CeltMinterInterface extends utils.Interface {
     functionFragment: "balanceOfBatch",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "burn", data: BytesLike): Result;
   decodeFunctionResult(functionFragment: "claim", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "isApprovedForAll",
@@ -122,6 +130,7 @@ export interface CeltMinterInterface extends utils.Interface {
     functionFragment: "setGreenFalAirdropAmount",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "setUri", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "supportsInterface",
     data: BytesLike
@@ -236,8 +245,14 @@ export interface CeltMinter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<[BigNumber[]]>;
 
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     claim(
       amount: BigNumberish,
+      levelup: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
@@ -287,6 +302,11 @@ export interface CeltMinter extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<ContractTransaction>;
 
+    setUri(
+      domain: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<ContractTransaction>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -317,8 +337,14 @@ export interface CeltMinter extends BaseContract {
     overrides?: CallOverrides
   ): Promise<BigNumber[]>;
 
+  burn(
+    tokenId: BigNumberish,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   claim(
     amount: BigNumberish,
+    levelup: boolean,
     overrides?: PayableOverrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
@@ -368,6 +394,11 @@ export interface CeltMinter extends BaseContract {
     overrides?: Overrides & { from?: string | Promise<string> }
   ): Promise<ContractTransaction>;
 
+  setUri(
+    domain: string,
+    overrides?: Overrides & { from?: string | Promise<string> }
+  ): Promise<ContractTransaction>;
+
   supportsInterface(
     interfaceId: BytesLike,
     overrides?: CallOverrides
@@ -398,7 +429,13 @@ export interface CeltMinter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber[]>;
 
-    claim(amount: BigNumberish, overrides?: CallOverrides): Promise<void>;
+    burn(tokenId: BigNumberish, overrides?: CallOverrides): Promise<void>;
+
+    claim(
+      amount: BigNumberish,
+      levelup: boolean,
+      overrides?: CallOverrides
+    ): Promise<void>;
 
     isApprovedForAll(
       account: string,
@@ -440,6 +477,8 @@ export interface CeltMinter extends BaseContract {
       airdropAmount: BigNumberish,
       overrides?: CallOverrides
     ): Promise<void>;
+
+    setUri(domain: string, overrides?: CallOverrides): Promise<void>;
 
     supportsInterface(
       interfaceId: BytesLike,
@@ -530,8 +569,14 @@ export interface CeltMinter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<BigNumber>;
 
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     claim(
       amount: BigNumberish,
+      levelup: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
@@ -581,6 +626,11 @@ export interface CeltMinter extends BaseContract {
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<BigNumber>;
 
+    setUri(
+      domain: string,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<BigNumber>;
+
     supportsInterface(
       interfaceId: BytesLike,
       overrides?: CallOverrides
@@ -612,8 +662,14 @@ export interface CeltMinter extends BaseContract {
       overrides?: CallOverrides
     ): Promise<PopulatedTransaction>;
 
+    burn(
+      tokenId: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
     claim(
       amount: BigNumberish,
+      levelup: boolean,
       overrides?: PayableOverrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 
@@ -660,6 +716,11 @@ export interface CeltMinter extends BaseContract {
 
     setGreenFalAirdropAmount(
       airdropAmount: BigNumberish,
+      overrides?: Overrides & { from?: string | Promise<string> }
+    ): Promise<PopulatedTransaction>;
+
+    setUri(
+      domain: string,
       overrides?: Overrides & { from?: string | Promise<string> }
     ): Promise<PopulatedTransaction>;
 

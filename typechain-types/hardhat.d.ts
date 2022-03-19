@@ -64,14 +64,6 @@ declare module "hardhat/types/runtime" {
       name: "GreenFalcoin",
       signerOrOptions?: ethers.Signer | FactoryOptions
     ): Promise<Contracts.GreenFalcoin__factory>;
-    getContractFactory(
-      name: "Greeter",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Greeter__factory>;
-    getContractFactory(
-      name: "Token",
-      signerOrOptions?: ethers.Signer | FactoryOptions
-    ): Promise<Contracts.Token__factory>;
 
     getContractAt(
       name: "OwnableUpgradeable",
@@ -138,16 +130,6 @@ declare module "hardhat/types/runtime" {
       address: string,
       signer?: ethers.Signer
     ): Promise<Contracts.GreenFalcoin>;
-    getContractAt(
-      name: "Greeter",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Greeter>;
-    getContractAt(
-      name: "Token",
-      address: string,
-      signer?: ethers.Signer
-    ): Promise<Contracts.Token>;
 
     // default types
     getContractFactory(

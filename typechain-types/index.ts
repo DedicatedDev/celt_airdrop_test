@@ -14,8 +14,6 @@ export type { ERC165 } from "./ERC165";
 export type { IERC165 } from "./IERC165";
 export type { CeltMinter } from "./CeltMinter";
 export type { GreenFalcoin } from "./GreenFalcoin";
-export type { Greeter } from "./Greeter";
-export type { Token } from "./Token";
 
 export { OwnableUpgradeable__factory } from "./factories/OwnableUpgradeable__factory";
 export { Ownable__factory } from "./factories/Ownable__factory";
@@ -30,5 +28,3 @@ export { ERC165__factory } from "./factories/ERC165__factory";
 export { IERC165__factory } from "./factories/IERC165__factory";
 export { CeltMinter__factory } from "./factories/CeltMinter__factory";
 export { GreenFalcoin__factory } from "./factories/GreenFalcoin__factory";
-export { Greeter__factory } from "./factories/Greeter__factory";
-export { Token__factory } from "./factories/Token__factory";

@@ -1,52 +1,50 @@
-{
-  "compilerOptions": {
-    "target": "es5",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
-
-    "outDir": "dist",
-    "declaration": true,
-    "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "noFallthroughCasesInSwitch": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "jsx": "react-jsx"
-  },
-  "include": [
-
-    "./scripts", 
-    "./test", 
-    "./typechain",
-  ],
-  "files": ["./hardhat.config.ts"]
-}
-
 // {
 //   "compilerOptions": {
-//     "target": "es2018",
-//     "module": "commonjs",
-//     "strict": false,
-//     "esModuleInterop": true,
+//     "target": "es5",
+//     "lib": [
+//       "dom",
+//       "dom.iterable",
+//       "esnext"
+//     ],
 //     "outDir": "dist",
 //     "declaration": true,
-//     "lib": [
-//           "dom",
-//           "dom.iterable",
-//             "esnext"
-//           ],
+//     "allowJs": true,
+//     "skipLibCheck": true,
+//     "esModuleInterop": true,
+//     "allowSyntheticDefaultImports": true,
+//     "strict": true,
+//     "forceConsistentCasingInFileNames": true,
+//     "noFallthroughCasesInSwitch": true,
+//     "module": "esnext",
+//     "moduleResolution": "node",
+//     "resolveJsonModule": true,
+//     "isolatedModules": true,
+//     "noEmit": true,
+//     "jsx": "react-jsx"
 //   },
-//   "include": ["./scripts", "./test", "./typechain"],
+//   "include": [
+//     "./scripts", 
+//     "./test", 
+//     "./typechain",
+//   ],
 //   "files": ["./hardhat.config.ts"]
 // }
+
+{
+  "compilerOptions": {
+    "target": "es2018",
+    "module": "commonjs",
+    "strict": false,
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "declaration": true,
+    "lib": [
+          "dom",
+          "dom.iterable",
+            "esnext"
+          ],
+  },
+  "include": ["./scripts", "./test", "./typechain"],
+  "files": ["./hardhat.config.ts"]
+}
 

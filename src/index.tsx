@@ -3,10 +3,19 @@ import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import { SnackbarProvider } from "notistack";
+import { AppContextProvider } from "./contexts/AppContext";
+import ThemeConfig from "./theme";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <SnackbarProvider>
+      <AppContextProvider>
+        <ThemeConfig>
+          <App />
+        </ThemeConfig>
+      </AppContextProvider>
+    </SnackbarProvider>
   </React.StrictMode>,
   document.getElementById("root")
 );
